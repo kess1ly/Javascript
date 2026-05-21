@@ -7,6 +7,7 @@ import Servicos from "./componentes/Servicos";
 import Admin from "./componentes/Admin";
 import AdminLogin from "./componentes/AdminLogin";
 import Nav from "./componentes/Nav";
+import Footer from "./componentes/Footer";
 
 export default function App() {
   const [pets, setPets] = useState([]);
@@ -63,6 +64,8 @@ export default function App() {
           }
         />
       </Routes>
+
+      <Footer />
     </>
   );
 }
