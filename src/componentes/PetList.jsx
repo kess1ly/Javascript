@@ -1,16 +1,10 @@
 import PetItem from "./PetItem";
 
-export default function PetList({ pets, removerPet, editarPet, modo }) {
+export default function PetList({ pets }) {
   return (
     <div className="pet-list">
       {pets.map((pet) => (
-        <PetItem
-          key={pet.id}
-          pet={pet}
-          removerPet={removerPet}
-          editarPet={editarPet}
-          modo={modo}
-        />
+        <PetItem key={pet.id} pet={pet} />
       ))}
     </div>
   );
