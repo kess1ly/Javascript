@@ -1,33 +1,55 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Nav() {
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
+
   return (
     <nav className="nav">
 
       {/* LOGO */}
       <div className="nav-logo">
-        🐾 PetFlow
-      </div>
-
-      {/* BUSCA (estilo Petz) */}
-      <div className="nav-search">
-        <input type="text" placeholder="Buscar produtos para seu pet..." />
+        🐾 <span>PetFlow</span>
       </div>
 
       {/* LINKS */}
       <ul className="nav-links">
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/cliente">Cliente</Link></li>
-        <li><Link to="/servicos">Serviços</Link></li>
-        <li><Link to="/admin">Admin</Link></li>
+        <li>
+          <Link className={isActive("/") ? "active" : ""} to="/">
+            Home
+          </Link>
+        </li>
+
+        <li>
+          <Link className={isActive("/cliente") ? "active" : ""} to="/cliente">
+            Cliente
+          </Link>
+        </li>
+
+        <li>
+          <Link className={isActive("/servicos") ? "active" : ""} to="/servicos">
+            Serviços
+          </Link>
+        </li>
+
+        <li>
+          <Link className={isActive("/admin") ? "active" : ""} to="/admin">
+            Admin
+          </Link>
+        </li>
       </ul>
 
-      {/* AÇÕES (tipo Petz: usuário/carrinho) */}
+      {/* AÇÕES */}
       <div className="nav-actions">
-        <span>👤</span>
-        <span>🛒</span>
-      </div>
+        <button className="icon-btn" title="Perfil">
+          👤
+        </button>
 
+        <button className="icon-btn" title="Carrinho">
+          🛒
+        </button>
+      </div>
     </nav>
   );
 }
