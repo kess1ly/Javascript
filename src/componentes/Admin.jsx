@@ -1,55 +1,87 @@
 import { useState } from "react";
-import PetForm from "./PetForm";
-import PetList from "./PetList";
 
-export default function Admin({ pets, setPets, onLogout }) {
-  const [petEditando, setPetEditando] = useState(null);
+export default function Admin({ pets, removerPet, atualizarPet, onLogout }) {
+  const [editando, setEditando] = useState(null);
 
-  // ➕ agora usa o estado global corretamente (sem duplicar lógica)
-  const salvarPet = (pet) => {
-    setPets([...pets, { ...pet, id: Date.now() }]);
-  };
-
-  const salvarEdicao = (id, petAtualizado) => {
-    setPets(pets.map((p) => (p.id === id ? petAtualizado : p)));
-    setPetEditando(null);
-  };
-
-  const removerPet = (id) => {
-    setPets(pets.filter((p) => p.id !== id));
-  };
-
-  const editarPet = (pet) => {
-    setPetEditando(pet);
-  };
+  function handleEditChange(id, campo, valor) {
+    atualizarPet(id, { [campo]: valor });
+  }
 
   return (
     <div className="container">
-      <h1 className="dashboard-title">Painel Admin</h1>
 
-      {/* 🔐 BOTÃO DE SAIR */}
-      <button
-        onClick={onLogout}
-        style={{
-          background: "#e74c3c",
-          marginBottom: "20px"
-        }}
-      >
-        Sair do Admin
-      </button>
+      {/* HEADER */}
+      <div className="admin-header">
+        <h1>Painel Admin 🧑‍💼</h1>
+        <button onClick={onLogout}>Sair</button>
+      </div>
 
-      <PetForm
-        adicionarPet={salvarPet}
-        salvarEdicao={salvarEdicao}
-        petEditando={petEditando}
-      />
+      {/* LISTA */}
+      <div className="admin-grid">
 
-      <PetList
-        pets={pets}
-        removerPet={removerPet}
-        editarPet={editarPet}
-        modo="admin"
-      />
+        {pets.length === 0 ? (
+          <p>Nenhum pet cadastrado.</p>
+        ) : (
+          pets.map((pet) => (
+            <div key={pet.id} className="admin-card">
+
+              {editando === pet.id ? (
+                <>
+                  <input
+                    value={pet.nome}
+                    onChange={(e) =>
+                      handleEditChange(pet.id, "nome", e.target.value)
+                    }
+                  />
+
+                  <input
+                    value={pet.especie}
+                    onChange={(e) =>
+                      handleEditChange(pet.id, "especie", e.target.value)
+                    }
+                  />
+
+                  <input
+                    value={pet.raca || ""}
+                    onChange={(e) =>
+                      handleEditChange(pet.id, "raca", e.target.value)
+                    }
+                  />
+
+                  <div className="admin-actions">
+                    <button onClick={() => setEditando(null)}>
+                      Salvar
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3>{pet.nome}</h3>
+
+                  <p><b>Espécie:</b> {pet.especie}</p>
+                  <p><b>Raça:</b> {pet.raca || "-"}</p>
+                  <p><b>Idade:</b> {pet.idade || "-"}</p>
+                  <p><b>Tutor:</b> {pet.dono || "-"}</p>
+
+                  <div className="admin-actions">
+
+                    <button onClick={() => setEditando(pet.id)}>
+                      Editar
+                    </button>
+
+                    <button onClick={() => removerPet(pet.id)}>
+                      Excluir
+                    </button>
+
+                  </div>
+                </>
+              )}
+
+            </div>
+          ))
+        )}
+
+      </div>
     </div>
   );
 }
