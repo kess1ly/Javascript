@@ -1,35 +1,58 @@
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Home from "./componentes/Home";
-import Cliente from "./componentes/Cliente";
+import Cliente from "./componentes/cliente";
 import Servicos from "./componentes/Servicos";
 import Admin from "./componentes/Admin";
 import AdminLogin from "./componentes/AdminLogin";
+
 import Nav from "./componentes/Nav";
 import Footer from "./componentes/Footer";
+
+import { getPets, savePets, getAdminLogin, setAdminLogin } from "./util/storage";
 
 export default function App() {
   const [pets, setPets] = useState([]);
   const [adminLogado, setAdminLogado] = useState(false);
 
-  // 🔐 mantém login após atualizar página
+  // carregar pets
   useEffect(() => {
-    const auth = localStorage.getItem("adminLogado");
-    if (auth === "true") {
-      setAdminLogado(true);
-    }
+    setPets(getPets());
+    setAdminLogado(getAdminLogin());
   }, []);
 
-  // login admin
+  // salvar pets sempre que mudar
+  useEffect(() => {
+    savePets(pets);
+  }, [pets]);
+
+  function adicionarPet(pet) {
+    setPets([
+      ...pets,
+      { ...pet, id: crypto.randomUUID() }
+    ]);
+  }
+
+  function removerPet(id) {
+    setPets(pets.filter((p) => p.id !== id));
+  }
+
+  function atualizarPet(id, dados) {
+    setPets(
+      pets.map((p) =>
+        p.id === id ? { ...p, ...dados } : p
+      )
+    );
+  }
+
   function loginAdmin() {
-    localStorage.setItem("adminLogado", "true");
+    setAdminLogin(true);
     setAdminLogado(true);
   }
 
-  // logout admin
   function logoutAdmin() {
-    localStorage.removeItem("adminLogado");
+    setAdminLogin(false);
     setAdminLogado(false);
   }
 
@@ -37,33 +60,41 @@ export default function App() {
     <>
       <Nav />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
+      <div className="container">
+        <Routes>
 
-        {/* CLIENTE CADASTRA PETS */}
-        <Route
-          path="/cliente"
-          element={<Cliente pets={pets} setPets={setPets} />}
-        />
+          <Route path="/" element={<Home />} />
 
-        <Route path="/servicos" element={<Servicos />} />
-
-        {/* ADMIN EDITA PETS */}
-        <Route
-          path="/admin"
-          element={
-            adminLogado ? (
-              <Admin
+          <Route
+            path="/cliente"
+            element={
+              <Cliente
                 pets={pets}
-                setPets={setPets}
-                onLogout={logoutAdmin}
+                adicionarPet={adicionarPet}
               />
-            ) : (
-              <AdminLogin onLogin={loginAdmin} />
-            )
-          }
-        />
-      </Routes>
+            }
+          />
+
+          <Route path="/servicos" element={<Servicos />} />
+
+          <Route
+            path="/admin"
+            element={
+              adminLogado ? (
+                <Admin
+                  pets={pets}
+                  removerPet={removerPet}
+                  atualizarPet={atualizarPet}
+                  onLogout={logoutAdmin}
+                />
+              ) : (
+                <AdminLogin onLogin={loginAdmin} />
+              )
+            }
+          />
+
+        </Routes>
+      </div>
 
       <Footer />
     </>
