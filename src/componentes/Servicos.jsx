@@ -1,66 +1,69 @@
 export default function Servicos() {
+  const servicos = [
+    {
+      titulo: "Banho e Higienização",
+      descricao:
+        "Banho completo com produtos específicos, corte de unhas, limpeza de ouvidos e hidratação."
+    },
+    {
+      titulo: "Tosa Higiênica e Estética",
+      descricao:
+        "Tosas personalizadas de acordo com raça, conforto e estilo do pet."
+    },
+    {
+      titulo: "Consultas Veterinárias",
+      descricao:
+        "Atendimento especializado para prevenção, diagnóstico e tratamento de doenças."
+    },
+    {
+      titulo: "Vacinação",
+      descricao:
+        "Controle completo do calendário vacinal para proteção do seu pet."
+    },
+    {
+      titulo: "Hospedagem Pet",
+      descricao:
+        "Ambiente seguro, confortável e supervisionado para estadias temporárias."
+    },
+    {
+      titulo: "Atendimento Personalizado",
+      descricao:
+        "Cuidados adaptados ao comportamento e necessidade de cada pet."
+    }
+  ];
+
   return (
-    <div className="container">
-      <h1 className="dashboard-title">Nossos Serviços 🐾</h1>
+    <div className="container servicos-v2">
 
-      <p className="dashboard-subtitle">
-        No PetFlow, oferecemos cuidados completos para garantir a saúde,
-        higiene e bem-estar do seu pet. Conheça nossos serviços abaixo.
-      </p>
+      {/* HERO */}
+      <div className="servicos-hero">
+        <h1>Nossos Serviços 🐾</h1>
+        <p>Cuidado completo para saúde, higiene e bem-estar do seu pet.</p>
+      </div>
 
-      <div className="dashboard-cards">
+      {/* LISTA MODERNA */}
+      <div className="servicos-lista">
 
-        <div className="card">
-          <h3>Banho e Higienização</h3>
-          <p>
+        {servicos.map((s, index) => (
+          <div
+            key={index}
+            className={`servico-item ${index % 2 === 0 ? "left" : "right"}`}
+          >
 
-            Realizamos banho completo com produtos especiais para cada tipo de
-            pelagem, incluindo corte de unhas, limpeza de ouvidos e hidratação
-            dos pelos.
-          </p>
-        </div>
+            <div className="servico-icon">
+              🐾
+            </div>
 
-        <div className="card">
-          <h3>Tosa Higiênica e Estética</h3>
-          <p>
-            A tosa ajuda no conforto do pet e na manutenção da higiene.
-            Trabalhamos com tosas padrão, personalizadas e de acordo com a raça.
-          </p>
-        </div>
+            <div className="servico-content">
+              <h3>{s.titulo}</h3>
+              <p>{s.descricao}</p>
+            </div>
 
-        <div className="card">
-          <h3>Consultas Veterinárias</h3>
-          <p>
-            Atendimento especializado para prevenção, diagnóstico e tratamento
-            de doenças, garantindo a saúde e longevidade do seu animal.
-          </p>
-        </div>
-
-        <div className="card">
-          <h3>Vacinação</h3>
-          <p>
-            Mantemos o calendário de vacinação do seu pet atualizado, protegendo
-            contra doenças graves e comuns em cães e gatos.
-          </p>
-        </div>
-
-        <div className="card">
-          <h3>Hospedagem Pet</h3>
-          <p>
-            Ambiente seguro e confortável para quando você precisar viajar.
-            Seu pet fica bem cuidado, alimentado e supervisionado.
-          </p>
-        </div>
-
-        <div className="card">
-          <h3>Atendimento Personalizado</h3>
-          <p>
-            Cada pet recebe atenção especial de acordo com suas necessidades,
-            comportamento e histórico de saúde.
-          </p>
-        </div>
+          </div>
+        ))}
 
       </div>
+
     </div>
   );
 }
