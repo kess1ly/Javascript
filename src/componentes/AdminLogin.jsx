@@ -7,27 +7,26 @@ export default function AdminLogin({ onLogin }) {
     e.preventDefault();
 
     if (senha === "1234") {
-      onLogin();
+      onLogin(); // salva no localStorage via App.jsx
     } else {
-      alert("Senha errada");
+      alert("Senha incorreta!");
     }
   }
 
   return (
     <div className="container">
-
-      <h1>Login Admin</h1>
+      <h1>Login do Administrador 🔐</h1>
 
       <form onSubmit={entrar}>
         <input
           type="password"
+          placeholder="Digite a senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
         />
 
-        <button>Entrar</button>
+        <button type="submit">Entrar</button>
       </form>
-
     </div>
   );
 }
