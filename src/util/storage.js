@@ -1,31 +1,49 @@
-const PETS_KEY = "pets";
-const USER_KEY = "usuarioLogado";
-const ADMIN_KEY = "adminLogado";
-
 export function getPets() {
-  return JSON.parse(localStorage.getItem(PETS_KEY)) || [];
+  try {
+    return JSON.parse(localStorage.getItem("pets")) || [];
+  } catch {
+    return [];
+  }
 }
 
-export function savePets(pets) {
-  localStorage.setItem(PETS_KEY, JSON.stringify(pets));
+export function salvarPet(pet) {
+  const lista = getPets();
+
+  const novoPet = {
+    ...pet,
+    id: crypto.randomUUID(),
+  };
+
+  lista.push(novoPet);
+  localStorage.setItem("pets", JSON.stringify(lista));
 }
 
-export function getUser() {
-  return JSON.parse(localStorage.getItem(USER_KEY));
+export function removerPet(id) {
+  const novaLista = getPets().filter(
+    (pet) => pet.id !== id
+  );
+
+  localStorage.setItem(
+    "pets",
+    JSON.stringify(novaLista)
+  );
 }
 
-export function setUser(user) {
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+export function editarPet(id, dadosAtualizados) {
+  const lista = getPets();
+
+  const novaLista = lista.map((pet) =>
+    pet.id === id
+      ? { ...pet, ...dadosAtualizados }
+      : pet
+  );
+
+  localStorage.setItem(
+    "pets",
+    JSON.stringify(novaLista)
+  );
 }
 
-export function logoutUser() {
-  localStorage.removeItem(USER_KEY);
-}
-
-export function setAdminLogin(value) {
-  localStorage.setItem(ADMIN_KEY, value);
-}
-
-export function getAdminLogin() {
-  return localStorage.getItem(ADMIN_KEY) === "true";
+export function limparPets() {
+  localStorage.removeItem("pets");
 }
